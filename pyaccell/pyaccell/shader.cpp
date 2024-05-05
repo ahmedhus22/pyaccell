@@ -1,4 +1,4 @@
-#include <shader.hpp>
+#include <pyaccell/shader.hpp>
 #include <glad/glad.h>
 
 #include <string>

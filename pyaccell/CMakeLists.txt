@@ -1,7 +1,7 @@
 add_library(
     pyaccell
-    shader.hpp
-    shader.cpp
+    pyaccell/shader.hpp
+    pyaccell/shader.cpp
 )
 
 set_target_properties(pyaccell PROPERTIES LINKER_LANGUAGE CXX)
