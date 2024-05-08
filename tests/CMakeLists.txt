@@ -1,5 +1,5 @@
-add_executable(shader_tests shader_tests.cpp)
-target_link_libraries(shader_tests PRIVATE GTest::gtest_main pyaccell)
+add_executable(sim_tests sim_tests.cpp)
+target_link_libraries(sim_tests PRIVATE GTest::gtest_main pyaccell)
 
 include(GoogleTest)
-gtest_discover_tests(shader_tests)
+gtest_discover_tests(sim_tests)
