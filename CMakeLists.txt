@@ -3,6 +3,7 @@ project(pyaccell VERSION 1.0.0)
 
 include(CTest)
 add_subdirectory(deps/glad)
+add_subdirectory(deps/glm)
 add_subdirectory(deps/glfw)
 add_subdirectory(deps/googletest)
 
