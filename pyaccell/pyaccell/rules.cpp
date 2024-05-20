@@ -40,3 +40,19 @@ unsigned int pyaccell::generate_rule(unsigned int *rule, size_t states, size_t i
     glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, states, indices, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, rule);
     return textureRule;
 }
+
+// returns texture which stores input states (initially random)
+unsigned int pyaccell::random_input_state(const unsigned int width, const unsigned int height) {
+    unsigned int textureInputStates;
+    glGenTextures(1, &textureInputStates);
+    glBindTexture(GL_TEXTURE_2D, textureInputStates);
+
+    // TODO: randomize inputs
+    unsigned int* data = new unsigned int[width * height];
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    return textureInputStates;
+}
