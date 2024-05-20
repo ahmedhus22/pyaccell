@@ -31,3 +31,12 @@ unsigned int pyaccell::generate_binomials() {
     return binomial_tex;
 }
 
+// returns texture which stores rule: delta[state][index] = newstate
+// Test this
+unsigned int pyaccell::generate_rule(unsigned int *rule, size_t states, size_t indices) {
+    unsigned int textureRule;
+    glGenTextures(1, &textureRule);
+    glBindTexture(GL_TEXTURE_2D, textureRule);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, states, indices, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, rule);
+    return textureRule;
+}
