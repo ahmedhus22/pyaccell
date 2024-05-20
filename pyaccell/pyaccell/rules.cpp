@@ -4,6 +4,7 @@
 #include <vector>
 
 int pyaccell::binomial_coefficient(const int n, const int k) {
+    if (k==0) return 1;
     std::vector<int> aSolutions(k);
     aSolutions[0] = n - k + 1;
 
@@ -17,7 +18,7 @@ int pyaccell::binomial_coefficient(const int n, const int k) {
 // returns a texture which stores pre-computed binomial coefficients in RED component
 unsigned int pyaccell::generate_binomials() {
     unsigned int* data = new unsigned int[32*32]();
-    for (int n=0; n<32; n++) {
+    for (int n=1; n<32; n++) {
         for (int k=0; k<32; k++) {
             data[k * 32 + n] = pyaccell::binomial_coefficient(n, k);
         }
