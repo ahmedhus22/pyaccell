@@ -80,20 +80,28 @@ int pyaccell::run()
 
     // framebuffer configuration
     // -------------------------
-    unsigned int framebuffer;
-    glGenFramebuffers(1, &framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    // create a color attachment texture
-    unsigned int textureColorbuffer;
-    glGenTextures(1, &textureColorbuffer);
-    glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, FRAME_WIDTH, FRAME_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    /**
+        framebuffer(textureInput) -> textureOutput
+        framebuffer_alt(textureOutput) -> textureInput
+        swap or alternate framebuffers each loop
+    */
+    unsigned int framebuffer[2];
+    unsigned int textureInput[2];
+    glGenTextures(2, textureInput);
+    glGenFramebuffers(2, framebuffer);
+    for (int i=0; i<2; i++) {
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[i]);
+        if (i == 0) {
+            textureInput[i] = pyaccell::random_input_state(FRAME_WIDTH, FRAME_HEIGHT, 2);
+        }
+        else {
+            textureInput[i] = pyaccell::create_empty_texture(FRAME_WIDTH, FRAME_HEIGHT);
+        }
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureInput[i], 0);
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
 
     // simShader uniforms
     // ------------------
@@ -102,7 +110,6 @@ int pyaccell::run()
     unsigned int textureBinomials = pyaccell::generate_binomials();
     simShader.setInt("uBinomial", 1);
     // set inputStates sampler to 2
-    unsigned int textureInputStates = pyaccell::random_input_state(FRAME_WIDTH, FRAME_HEIGHT, 2);
     simShader.setInt("inputStates", 2);
     // set rule sampler (transition function) to 3 
     unsigned int rule[] = { // (temporary value for now)
@@ -115,6 +122,10 @@ int pyaccell::run()
     simShader.setInt("subIndices", 9);
     simShader.setInt("inputWidth", FRAME_WIDTH);
 
+    screenShader.use();
+    screenShader.setInt("states", 2);
+
+    int input_index = 0;
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -122,15 +133,17 @@ int pyaccell::run()
         // input
         // -----
         processInput(window);
+        int output_index = (input_index == 0) ? 1 : 0;
 
         // render
         // ------
-        // bind to framebuffer and draw scene as we normally would to color texture 
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+        /*bind to framebuffer alternatively and "draw" to textureInput
+            start with frame_index=0 as input and frame_index=1(alt_index) as output
+        */
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[output_index]);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // TODO: copy textureColor to textureInputStates
         simShader.use();
         glBindVertexArray(quadVAO);
         glActiveTexture(GL_TEXTURE1);
@@ -138,9 +151,8 @@ int pyaccell::run()
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, textureRule);
         glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, textureInputStates);
+        glBindTexture(GL_TEXTURE_2D, textureInput[input_index]);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, SCR_WIDTH, SCR_HEIGHT);
 
         // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -151,12 +163,13 @@ int pyaccell::run()
 
         screenShader.use();
         glBindVertexArray(quadVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, textureInput[output_index]);	// use the color attachment texture as the texture of the quad plane
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
+        input_index = output_index;
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
