@@ -3,6 +3,8 @@
 #include <pyaccell/rules.hpp>
 #include <vector>
 #include <cstdlib>
+#include <time.h>
+#define MAX_STATES 14
 
 int pyaccell::binomial_coefficient(const int n, const int k) {
     if (k==0) return 1;
@@ -48,9 +50,14 @@ unsigned int pyaccell::random_input_state(const unsigned int width, const unsign
     unsigned int textureInputStates;
     glGenTextures(1, &textureInputStates);
     glBindTexture(GL_TEXTURE_2D, textureInputStates);
-    unsigned int* data = new unsigned int[width * height];
+    unsigned char* data = new unsigned char[width * height];
+    srand(time(0));
     for (int i=0; i<width*height; i++) {
         data[i] = (unsigned int)(rand() % states);
+        if (data[i] == 1) {
+            data[i] = 255;
+        }
+        else data[i] = 0;
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
