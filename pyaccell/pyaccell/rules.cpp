@@ -2,6 +2,7 @@
 #include <pyaccell/shader.hpp>
 #include <pyaccell/rules.hpp>
 #include <vector>
+#include <cstdlib>
 
 int pyaccell::binomial_coefficient(const int n, const int k) {
     if (k==0) return 1;
@@ -43,17 +44,18 @@ unsigned int pyaccell::generate_rule(unsigned int *rule, size_t states, size_t i
 }
 
 // returns texture which stores input states (initially random)
-unsigned int pyaccell::random_input_state(const unsigned int width, const unsigned int height) {
+unsigned int pyaccell::random_input_state(const unsigned int width, const unsigned int height, const unsigned int states) {
     unsigned int textureInputStates;
     glGenTextures(1, &textureInputStates);
     glBindTexture(GL_TEXTURE_2D, textureInputStates);
-
-    // TODO: randomize inputs
     unsigned int* data = new unsigned int[width * height];
-
+    for (int i=0; i<width*height; i++) {
+        data[i] = (unsigned int)(rand() % states);
+    }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    delete[] data;
 
     return textureInputStates;
 }
