@@ -66,3 +66,15 @@ unsigned int pyaccell::random_input_state(const unsigned int width, const unsign
 
     return textureInputStates;
 }
+
+// returns empty R32UI texture to store data in red channel
+unsigned int pyaccell::create_empty_texture(const unsigned int width, const unsigned int height) {
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    return texture;
+}
