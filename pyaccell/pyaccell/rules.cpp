@@ -29,7 +29,7 @@ unsigned int pyaccell::generate_binomials() {
     unsigned int binomial_tex; 
     glGenTextures(1, &binomial_tex);
     glBindTexture(GL_TEXTURE_2D, binomial_tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, 32, 32, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, 32, 32, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     delete[] data;
@@ -37,15 +37,16 @@ unsigned int pyaccell::generate_binomials() {
     return binomial_tex;
 }
 
-// returns texture which stores rule: delta[state][index] = newstate
-// Test this
-unsigned int pyaccell::generate_rule(unsigned int *rule, size_t states, size_t indices) {
+// returns texture which stores rule: delta[index][state] = newstate
+unsigned int pyaccell::generate_rule(unsigned int *rule, size_t indices, size_t states) {
     unsigned int textureRule;
     glGenTextures(1, &textureRule);
     glBindTexture(GL_TEXTURE_2D, textureRule);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, states, indices, 0, GL_RED_INTEGER, GL_UNSIGNED_BYTE, rule);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, indices, states, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, rule);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     return textureRule;
 }
 
@@ -59,7 +60,7 @@ unsigned int pyaccell::random_input_state(const unsigned int width, const unsign
     for (int i=0; i<width*height; i++) {
         data[i] = (unsigned int)(rand() % states);
     }
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -74,7 +75,7 @@ unsigned int pyaccell::create_empty_texture(const unsigned int width, const unsi
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8UI, width, height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
