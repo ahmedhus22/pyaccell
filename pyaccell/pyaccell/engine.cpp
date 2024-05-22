@@ -12,8 +12,8 @@ void processInput(GLFWwindow *window);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-const unsigned int FRAME_WIDTH = 800;
-const unsigned int FRAME_HEIGHT = 600;
+const unsigned int FRAME_WIDTH = 300;
+const unsigned int FRAME_HEIGHT = 200;
 
 int pyaccell::run()
 {
@@ -87,6 +87,7 @@ int pyaccell::run()
     */
     unsigned int framebuffer[2];
     unsigned int textureInput[2];
+    unsigned int textureColorbuffer = pyaccell::create_color_texture(FRAME_WIDTH, FRAME_HEIGHT);
     glGenTextures(2, textureInput);
     glGenFramebuffers(2, framebuffer);
     for (int i=0; i<2; i++) {
@@ -97,7 +98,10 @@ int pyaccell::run()
         else {
             textureInput[i] = pyaccell::create_empty_texture(FRAME_WIDTH, FRAME_HEIGHT);
         }
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureInput[i], 0);
+        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+        glBindTexture(GL_TEXTURE_2D, textureInput[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, textureInput[i], 0);
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -124,7 +128,7 @@ int pyaccell::run()
     simShader.setInt("inputHeight", FRAME_HEIGHT);
 
     screenShader.use();
-    screenShader.setInt("states", 2);
+    screenShader.setInt("screenTexture", 0);
 
     int input_index = 0;
     // render loop
@@ -164,8 +168,8 @@ int pyaccell::run()
 
         screenShader.use();
         glBindVertexArray(quadVAO);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, textureInput[output_index]);	// use the color attachment texture as the texture of the quad plane
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

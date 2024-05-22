@@ -1,5 +1,6 @@
 #version 330 core
-layout (location = 0) out uint nextstate;
+layout (location = 0) out vec3 col;
+layout (location = 1) out uint nextstate;
 
 in vec2 TexCoords;
 
@@ -27,4 +28,5 @@ void main()
     uint newstate = texelFetch(rule, ivec2(count, curstate), 0).r;
     
     nextstate = newstate;
+    col = vec3(float(nextstate));
 }
