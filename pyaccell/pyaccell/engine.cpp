@@ -12,8 +12,8 @@ void processInput(GLFWwindow *window);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-const unsigned int FRAME_WIDTH = 300;
-const unsigned int FRAME_HEIGHT = 200;
+const unsigned int FRAME_WIDTH = 800;
+const unsigned int FRAME_HEIGHT = 600;
 
 int pyaccell::run()
 {
@@ -123,7 +123,7 @@ int pyaccell::run()
     unsigned int textureRule = pyaccell::generate_rule(rule, 9, 2);
     simShader.setInt("rule", 3);
     simShader.setInt("numStates", 2);
-    simShader.setInt("subIndices", 9);
+    //simShader.setInt("subIndices", 9);
     simShader.setInt("inputWidth", FRAME_WIDTH);
     simShader.setInt("inputHeight", FRAME_HEIGHT);
 
@@ -148,7 +148,8 @@ int pyaccell::run()
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[output_index]);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
+        GLenum bufs[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+        glDrawBuffers(2, bufs);
         simShader.use();
         glBindVertexArray(quadVAO);
         glActiveTexture(GL_TEXTURE1);

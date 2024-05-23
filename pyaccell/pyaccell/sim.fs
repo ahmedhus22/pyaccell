@@ -10,7 +10,7 @@ uniform usampler2D rule;
 uniform int numStates;
 uniform int inputWidth; // width used to create input texture
 uniform int inputHeight;
-uniform int subIndices;
+//uniform int subIndices;
 
 void main() 
 {
@@ -19,7 +19,7 @@ void main()
     int count = -int(curstate);
     for (int x = -1; x <= 1; x += 1) {
         for (int y = -1; y <= 1; y += 1) {
-            int v = int(texture(inputStates, TexCoords + vec2(x / inputWidth, y / inputHeight)).r);
+            int v = int(texture(inputStates, TexCoords + vec2((x + 0.01)/ inputWidth, (y + 0.01)/ inputHeight)).r);
             if (v == 1) {
                 count += 1;
             }
