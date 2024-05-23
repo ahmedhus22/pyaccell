@@ -122,7 +122,6 @@ int pyaccell::run()
     simShader.setInt("inputStates", INPUT);
     simShader.setInt("rule", RULE);
     simShader.setInt("numStates", 2);
-    //simShader.setInt("subIndices", 9);
     simShader.setInt("inputWidth", FRAME_WIDTH);
     simShader.setInt("inputHeight", FRAME_HEIGHT);
 

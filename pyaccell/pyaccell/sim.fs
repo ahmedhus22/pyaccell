@@ -10,24 +10,39 @@ uniform usampler2D rule;
 uniform int numStates;
 uniform int inputWidth; // width used to create input texture
 uniform int inputHeight;
-//uniform int subIndices;
 
 const float offset = 1.0 / 3000.0;
+
+// returns binomial coefficient (n choose k) from precompute texture
+int binomial(int n, int k) {
+    return int(texelFetch(uBinomial, ivec2(n, k), 0).r);
+}
 
 void main() 
 {
     uint curstate = texture(inputStates, TexCoords).r;
 
-    int count = -int(curstate);
+    int N[14] = int[](0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    N[curstate] = -1;
     for (int x = -1; x <= 1; x += 1) {
         for (int y = -1; y <= 1; y += 1) {
             int v = int(texture(inputStates, TexCoords + vec2((x + offset)/ inputWidth, (y + offset)/ inputHeight)).r);
-            if (v == 1) {
-                count += 1;
-            }
+            N[v] += 1; 
         }
     }
-    uint newstate = texelFetch(rule, ivec2(count, curstate), 0).r;
+
+    int index = 0;
+    int y = 8;
+    for (int i = 1; i < 14; i++) {
+        int v = N[i];
+        if (v > 0) {
+            int x = numStates - i;
+            index += binomial(y + x, x) - binomial(y - v + x, x);
+        }
+        y -= v;
+    }
+
+    uint newstate = texelFetch(rule, ivec2(index, curstate), 0).r;
     
     nextstate = newstate;
     col = vec3(float(nextstate));
