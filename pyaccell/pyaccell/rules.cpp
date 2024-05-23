@@ -29,7 +29,7 @@ unsigned int pyaccell::generate_binomials() {
     unsigned int binomial_tex; 
     glGenTextures(1, &binomial_tex);
     glBindTexture(GL_TEXTURE_2D, binomial_tex);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, 32, 32, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8UI, 32, 32, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     delete[] data;
@@ -42,7 +42,7 @@ unsigned int pyaccell::generate_rule(unsigned int *rule, size_t indices, size_t 
     unsigned int textureRule;
     glGenTextures(1, &textureRule);
     glBindTexture(GL_TEXTURE_2D, textureRule);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI, indices, states, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, rule);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8UI, indices, states, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, rule);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
