@@ -74,7 +74,7 @@ int pyaccell::run()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     glBindVertexArray(0);
-    // shader configuration
+    // final screen shader configuration
     screenShader.use();
     screenShader.setInt("screenTexture", 0);
 
@@ -106,29 +106,25 @@ int pyaccell::run()
             std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
+    GLenum framebufs[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
 
     // simShader uniforms
     // ------------------
-    // set Binomial sampler to Texture Unit 1
-    simShader.use();
     unsigned int textureBinomials = pyaccell::generate_binomials();
-    simShader.setInt("uBinomial", 1);
-    // set inputStates sampler to 2
-    simShader.setInt("inputStates", 2);
-    // set rule sampler (transition function) to 3 
     unsigned int rule[] = { // (temporary value for now)
         0,0,0,1,0,0,0,0,0,
         0,0,1,1,0,0,0,0,0
     };
     unsigned int textureRule = pyaccell::generate_rule(rule, 9, 2);
-    simShader.setInt("rule", 3);
+    enum SAMPLER {BINOMIAL = 1, INPUT = 2, RULE = 3};
+    simShader.use();
+    simShader.setInt("uBinomial", BINOMIAL);
+    simShader.setInt("inputStates", INPUT);
+    simShader.setInt("rule", RULE);
     simShader.setInt("numStates", 2);
     //simShader.setInt("subIndices", 9);
     simShader.setInt("inputWidth", FRAME_WIDTH);
     simShader.setInt("inputHeight", FRAME_HEIGHT);
-
-    screenShader.use();
-    screenShader.setInt("screenTexture", 0);
 
     int input_index = 0;
     // render loop
@@ -148,29 +144,27 @@ int pyaccell::run()
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[output_index]);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        GLenum bufs[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-        glDrawBuffers(2, bufs);
+        glDrawBuffers(2, framebufs);
         simShader.use();
         glBindVertexArray(quadVAO);
-        glActiveTexture(GL_TEXTURE1);
+        glActiveTexture(GL_TEXTURE0 + BINOMIAL);
         glBindTexture(GL_TEXTURE_2D, textureBinomials);
-        glActiveTexture(GL_TEXTURE3);
+        glActiveTexture(GL_TEXTURE0 + RULE);
         glBindTexture(GL_TEXTURE_2D, textureRule);
-        glActiveTexture(GL_TEXTURE2);
+        glActiveTexture(GL_TEXTURE0 + INPUT);
         glBindTexture(GL_TEXTURE_2D, textureInput[input_index]);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
-        // clear all relevant buffers
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         screenShader.use();
         glBindVertexArray(quadVAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+        glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
