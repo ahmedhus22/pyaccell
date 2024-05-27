@@ -18,6 +18,11 @@ int pyaccell::binomial_coefficient(const int n, const int k) {
     return aSolutions[k - 1];
 }
 
+unsigned int pyaccell::no_of_indices(unsigned int states) {
+    unsigned int target = 8;
+    return pyaccell::binomial_coefficient(states + target - 1, target);
+}
+
 // returns a texture which stores pre-computed binomial coefficients in RED component
 unsigned int pyaccell::generate_binomials() {
     unsigned int* data = new unsigned int[32*32]();
@@ -38,7 +43,7 @@ unsigned int pyaccell::generate_binomials() {
 }
 
 // returns texture which stores rule: delta[index][state] = newstate
-unsigned int pyaccell::generate_rule(unsigned int *rule, size_t indices, size_t states) {
+unsigned int pyaccell::generate_rule(const unsigned int* rule, size_t indices, size_t states) {
     unsigned int textureRule;
     glGenTextures(1, &textureRule);
     glBindTexture(GL_TEXTURE_2D, textureRule);

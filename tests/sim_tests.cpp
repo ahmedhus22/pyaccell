@@ -15,5 +15,10 @@ TEST(Rules, BinomialCoeffients) {
 
 // runs the simulation to verify output
 TEST(Simulations, RunSimulation) {
-    EXPECT_FALSE(pyaccell::run());
+    unsigned int rule[] = {
+        0,0,0,1,0,0,0,0,0,
+        0,0,1,1,0,0,0,0,0
+    };
+    unsigned int states = 2;
+    EXPECT_FALSE(pyaccell::run(rule, states));
 }

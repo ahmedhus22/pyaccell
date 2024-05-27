@@ -15,7 +15,7 @@ const unsigned int SCR_HEIGHT = 600;
 const unsigned int FRAME_WIDTH = 800;
 const unsigned int FRAME_HEIGHT = 600;
 
-int pyaccell::run()
+int pyaccell::run(const unsigned int* rule, const unsigned int states)
 {
     // glfw: initialize and configure
     // ------------------------------
@@ -111,17 +111,14 @@ int pyaccell::run()
     // simShader uniforms
     // ------------------
     unsigned int textureBinomials = pyaccell::generate_binomials();
-    unsigned int rule[] = { // (temporary value for now)
-        0,0,0,1,0,0,0,0,0,
-        0,0,1,1,0,0,0,0,0
-    };
-    unsigned int textureRule = pyaccell::generate_rule(rule, 9, 2);
+    unsigned int indices = pyaccell::no_of_indices(states);
+    unsigned int textureRule = pyaccell::generate_rule(rule, indices, states);
     enum SAMPLER {BINOMIAL = 1, INPUT = 2, RULE = 3};
     simShader.use();
     simShader.setInt("uBinomial", BINOMIAL);
     simShader.setInt("inputStates", INPUT);
     simShader.setInt("rule", RULE);
-    simShader.setInt("numStates", 2);
+    simShader.setInt("numStates", states);
     simShader.setInt("inputWidth", FRAME_WIDTH);
     simShader.setInt("inputHeight", FRAME_HEIGHT);
 

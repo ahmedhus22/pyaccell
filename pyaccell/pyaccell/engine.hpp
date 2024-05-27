@@ -1,5 +1,5 @@
 #pragma once
 
 namespace pyaccell {
-    int run();
+    int run(const unsigned int* rule, const unsigned int states);
 }
