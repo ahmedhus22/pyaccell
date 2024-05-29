@@ -39,6 +39,8 @@ int pyaccell::run(const unsigned int* rule, const unsigned int states)
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    // this is necessary for high resolution displays otherwise only part of window is rendered
+    glfwGetFramebufferSize(window, &scr_width, &scr_height);
 
     // glad: load all OpenGL function pointers
     // ---------------------------------------
@@ -47,6 +49,7 @@ int pyaccell::run(const unsigned int* rule, const unsigned int states)
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+    glViewport(0, 0, scr_width, scr_height);
 
     pyaccell::Shader screenShader(SHADER_PATH "framebuffers_screen.vs", SHADER_PATH "framebuffers_screen.fs");
     pyaccell::Shader simShader(SHADER_PATH "sim.vs", SHADER_PATH "sim.fs");
