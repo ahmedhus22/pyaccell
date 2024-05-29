@@ -10,8 +10,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+int scr_width = 800;
+int scr_height = 600;
 const unsigned int FRAME_WIDTH = 800;
 const unsigned int FRAME_HEIGHT = 600;
 
@@ -30,7 +30,7 @@ int pyaccell::run(const unsigned int* rule, const unsigned int states)
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Pyaccell", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(scr_width, scr_height, "Pyaccell", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -137,6 +137,7 @@ int pyaccell::run(const unsigned int* rule, const unsigned int states)
         /*bind to framebuffer alternatively and "draw" to textureInput
             start with frame_index=0 as input and frame_index=1(alt_index) as output
         */
+        glViewport(0, 0, FRAME_WIDTH, FRAME_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[output_index]);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -152,6 +153,7 @@ int pyaccell::run(const unsigned int* rule, const unsigned int states)
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         // now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
+        glViewport(0, 0, scr_width, scr_height);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -190,5 +192,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     // make sure the viewport matches the new window dimensions; note that width and 
     // height will be significantly larger than specified on retina displays.
-    glViewport(0, 0, width, height);
+    //glViewport(0, 0, width, height);
+    scr_width = width;
+    scr_height = height;
 }
