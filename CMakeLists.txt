@@ -23,6 +23,7 @@ add_subdirectory(deps/googletest)
 
 add_subdirectory(pyaccell)
 
+target_compile_definitions(lib${CMAKE_PROJECT_NAME} PUBLIC SHADER_PATH="${CMAKE_CURRENT_SOURCE_DIR}/pyaccell/pyaccell/")
 target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC SHADER_PATH="${CMAKE_CURRENT_SOURCE_DIR}/pyaccell/pyaccell/")
 
 enable_testing()
