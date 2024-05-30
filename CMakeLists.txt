@@ -10,7 +10,7 @@ endif()
 find_package(Python 3.8 COMPONENTS Interpreter ${DEV_MODULE} REQUIRED
     OPTIONAL_COMPONENTS Development.SABIModule
 )
-find_package(nanobind CONFIG REQUIRED)
+#find_package(nanobind CONFIG REQUIRED)
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
@@ -27,7 +27,7 @@ add_subdirectory(deps/googletest)
 add_subdirectory(pyaccell)
 
 target_compile_definitions(lib${CMAKE_PROJECT_NAME} PUBLIC SHADER_PATH="${CMAKE_CURRENT_SOURCE_DIR}/pyaccell/pyaccell/")
-target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC SHADER_PATH="${CMAKE_CURRENT_SOURCE_DIR}/pyaccell/pyaccell/")
+target_compile_definitions(${CMAKE_PROJECT_NAME}_ext PUBLIC SHADER_PATH="${CMAKE_CURRENT_SOURCE_DIR}/pyaccell/pyaccell/")
 
 enable_testing()
 if(BUILD_TESTING)

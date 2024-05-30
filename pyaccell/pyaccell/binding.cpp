@@ -11,7 +11,7 @@ int run_ca(const UIntVector &rule, const unsigned int states) {
     return pyaccell::run(&rule[0], states);
 }
 
-NB_MODULE(pyaccell, m) {
+NB_MODULE(pyaccell_ext, m) {
     m.def("run_ca", &run_ca, "rule"_a, "states"_a, 
         "runs cellular automata simulation with given rule as a list cols=indices, rows=states.");
     m.doc() = "A GPU Accelerated Cellular Automata Library";
