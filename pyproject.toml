@@ -26,6 +26,7 @@ minimum-version = "0.4"
 
 # Setuptools-style build caching in a local directory
 build-dir = "build/{wheel_tag}"
+wheel.packages = ["pyaccell/pyaccell"]
 
 # Build stable ABI wheels for CPython 3.12+
 wheel.py-api = "cp312"
