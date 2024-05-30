@@ -7,7 +7,10 @@ else()
   set(DEV_MODULE Development.Module)
 endif()
 
-find_package(Python 3.8 COMPONENTS Interpreter ${DEV_MODULE} REQUIRED)
+find_package(Python 3.8 COMPONENTS Interpreter ${DEV_MODULE} REQUIRED
+    OPTIONAL_COMPONENTS Development.SABIModule
+)
+find_package(nanobind CONFIG REQUIRED)
 
 if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)

@@ -10,7 +10,7 @@ set(
     pyaccell/rules.cpp
     pyaccell/engine.cpp
 )
-nanobind_add_module(pyaccell ${pyaccell_HEADERS} ${pyaccell_SOURCES} pyaccell/binding.cpp)
+nanobind_add_module(pyaccell STABLE_ABI ${pyaccell_HEADERS} ${pyaccell_SOURCES} pyaccell/binding.cpp)
 set_target_properties(pyaccell PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(pyaccell PRIVATE glfw glad)
 target_link_libraries(pyaccell PUBLIC glm)
@@ -25,3 +25,5 @@ set_target_properties(libpyaccell PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(libpyaccell PRIVATE glfw glad)
 target_link_libraries(libpyaccell PUBLIC glm)
 target_include_directories(libpyaccell PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+
+install(TARGETS pyaccell LIBRARY DESTINATION pyaccell)
