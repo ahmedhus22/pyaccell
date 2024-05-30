@@ -34,6 +34,8 @@ build/
 
 # Python files
 venv/
+__pycache__
+*.whl
 
 #vscode
 .vscode/
