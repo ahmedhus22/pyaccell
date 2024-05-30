@@ -32,5 +32,8 @@
 *.app
 build/
 
+# Python files
+venv/
+
 #vscode
 .vscode/
