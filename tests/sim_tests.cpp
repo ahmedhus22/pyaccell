@@ -2,6 +2,7 @@
 #include <pyaccell/shader.hpp>
 #include <pyaccell/rules.hpp>
 #include <pyaccell/engine.hpp>
+#include <vector>
 
 /*
     if cmake says no tests found!! rebuild tests and rerun tests
@@ -15,10 +16,10 @@ TEST(Rules, BinomialCoeffients) {
 
 // runs the simulation to verify output
 TEST(Simulations, RunSimulation) {
-    unsigned int rule[] = {
+    std::vector<unsigned int> rule = {
         0,0,0,1,0,0,0,0,0,
         0,0,1,1,0,0,0,0,0
     };
     unsigned int states = 2;
-    EXPECT_FALSE(pyaccell::run(rule, states));
+    EXPECT_FALSE(pyaccell::run(&rule[0], states));
 }
