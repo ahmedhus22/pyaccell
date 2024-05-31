@@ -1,1 +1,1 @@
-from .pyaccell_ext import run_ca
+from .pyaccell_ext import Automata
