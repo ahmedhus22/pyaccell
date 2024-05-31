@@ -5,20 +5,21 @@
 #include <pyaccell/shader.hpp>
 #include <pyaccell/rules.hpp>
 #include <iostream>
+#include <vector>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 int scr_width = 800;
 int scr_height = 600;
 
-pyaccell::Automata::Automata(unsigned int *rule, unsigned int states) {
+pyaccell::Automata::Automata(std::vector<unsigned int>& rule, unsigned int states) {
     this->rule = rule;
     this->states = states;
     this->sim_width = 800u;
     this->sim_height = 600u;
 }
 
-pyaccell::Automata::Automata(unsigned int *rule, unsigned int states, unsigned int sim_width, unsigned int sim_height) {
+pyaccell::Automata::Automata(std::vector<unsigned int>& rule, unsigned int states, unsigned int sim_width, unsigned int sim_height) {
     this->rule = rule;
     this->states = states;
     this->sim_width = sim_width;
@@ -119,7 +120,7 @@ int pyaccell::Automata::run(const unsigned int iterations)
     // simShader uniforms
     unsigned int textureBinomials = pyaccell::generate_binomials();
     unsigned int indices = pyaccell::no_of_indices(states);
-    unsigned int textureRule = pyaccell::generate_rule(rule, indices, states);
+    unsigned int textureRule = pyaccell::generate_rule(&rule[0], indices, states);
     enum SAMPLER {BINOMIAL = 1, INPUT = 2, RULE = 3};
     simShader.use();
     simShader.setInt("uBinomial", BINOMIAL);
