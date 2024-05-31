@@ -6,4 +6,5 @@ rule = [
 ]
 states = 2
 
-pyaccell.run_ca(rule, 2)
+ca = pyaccell.Automata(rule, states)
+ca.run(1)

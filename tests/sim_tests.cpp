@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <pyaccell/shader.hpp>
 #include <pyaccell/rules.hpp>
-#include <pyaccell/engine.hpp>
+#include <pyaccell/automata.hpp>
 #include <vector>
 
 /*
@@ -14,6 +14,19 @@ TEST(Rules, BinomialCoeffients) {
     EXPECT_EQ(56, pyaccell::binomial_coefficient(8, 3));
 }
 
+TEST(Automata, RunSimulation) {
+    std::vector<unsigned int> rule = {
+        0,0,0,1,0,0,0,0,0,
+        0,0,1,1,0,0,0,0,0
+    };
+    unsigned int states = 2;
+    pyaccell::Automata ca(rule, states);
+    EXPECT_FALSE(ca.run(1));
+}
+
+/*
+#include <pyaccell/engine.hpp>
+Tests for function implementation (no longer used)
 // runs the simulation to verify output
 TEST(Simulations, RunSimulation) {
     std::vector<unsigned int> rule = {
@@ -23,3 +36,4 @@ TEST(Simulations, RunSimulation) {
     unsigned int states = 2;
     EXPECT_FALSE(pyaccell::run(&rule[0], states));
 }
+*/
