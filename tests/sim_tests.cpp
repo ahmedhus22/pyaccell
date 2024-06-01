@@ -3,6 +3,7 @@
 #include <pyaccell/rules.hpp>
 #include <pyaccell/automata.hpp>
 #include <vector>
+#include <array>
 
 /*
     if cmake says no tests found!! rebuild tests and rerun tests
@@ -15,7 +16,7 @@ TEST(Rules, BinomialCoeffients) {
 }
 
 TEST(Rules, GetIndex) {
-    std::vector<int> N = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    std::array<int, 14> N = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     unsigned int states = 3;
     N[3] = 8;
     EXPECT_EQ(0, pyaccell::get_index(N, 3));

@@ -1,5 +1,6 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/bind_vector.h>
+#include <nanobind/stl/array.h>
 #include <pyaccell/automata.hpp>
 #include <pyaccell/rules.hpp>
 #include <vector>

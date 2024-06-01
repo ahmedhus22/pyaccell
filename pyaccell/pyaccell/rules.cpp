@@ -2,6 +2,7 @@
 #include <pyaccell/shader.hpp>
 #include <pyaccell/rules.hpp>
 #include <vector>
+#include <array>
 #include <cstdlib>
 #include <time.h>
 #define MAX_STATES 14
@@ -24,7 +25,7 @@ unsigned int pyaccell::no_of_indices(unsigned int states) {
 }
 
 // returns index for given neighbours and max states, N: array of neighbour count for each state
-unsigned int pyaccell::get_index(std::vector<int>& N, unsigned int states) {
+unsigned int pyaccell::get_index(std::array<int, MAX_STATES>& N, unsigned int states) {
     int index = 0;
     int y = 8;
     for (int i = 1; i < MAX_STATES; i++) {
