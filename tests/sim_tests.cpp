@@ -14,6 +14,15 @@ TEST(Rules, BinomialCoeffients) {
     EXPECT_EQ(56, pyaccell::binomial_coefficient(8, 3));
 }
 
+TEST(Rules, GetIndex) {
+    std::vector<int> N = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    unsigned int states = 3;
+    N[3] = 8;
+    EXPECT_EQ(0, pyaccell::get_index(N, 3));
+    N[1] = 1; N[2] = 6; N[3] = 1;
+    EXPECT_EQ(15, pyaccell::get_index(N, 3));
+}
+
 TEST(Automata, RunSimulation) {
     std::vector<unsigned int> rule = {
         0,0,0,1,0,0,0,0,0,

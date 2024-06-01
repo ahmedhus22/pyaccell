@@ -1,6 +1,7 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/bind_vector.h>
 #include <pyaccell/automata.hpp>
+#include <pyaccell/rules.hpp>
 #include <vector>
 
 namespace nb = nanobind;
@@ -28,5 +29,7 @@ NB_MODULE(pyaccell_ext, m) {
         .def_rw("sim_width", &pyaccell::Automata::sim_width)
         .def_rw("sim_height", &pyaccell::Automata::sim_height);
     m.def("vec_to_list", &vec_to_list<unsigned int>);
+    m.def("max_index", &pyaccell::no_of_indices, "returns max no of indices for given no. of states");
+    m.def("get_index", &pyaccell::get_index, "returns the index for given neighbours(list of size 14) and max states");
     m.doc() = "A GPU Accelerated Cellular Automata Library";
 }

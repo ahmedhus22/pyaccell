@@ -23,6 +23,21 @@ unsigned int pyaccell::no_of_indices(unsigned int states) {
     return pyaccell::binomial_coefficient(states + target - 1, target);
 }
 
+// returns index for given neighbours and max states, N: array of neighbour count for each state
+unsigned int pyaccell::get_index(std::vector<int>& N, unsigned int states) {
+    int index = 0;
+    int y = 8;
+    for (int i = 1; i < MAX_STATES; i++) {
+        int v = N[i];
+        if (v > 0) {
+            int x = states - i;
+            index += pyaccell::binomial_coefficient(y + x, x) - pyaccell::binomial_coefficient(y - v + x, x);
+        }
+        y -= v;
+    }
+    return index;
+}
+
 // returns a texture which stores pre-computed binomial coefficients in RED component
 unsigned int pyaccell::generate_binomials() {
     unsigned int* data = new unsigned int[32*32]();
