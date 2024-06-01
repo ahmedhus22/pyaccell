@@ -27,7 +27,7 @@ pyaccell::Automata::Automata(std::vector<unsigned int>& rule, unsigned int state
 }
 
 // run simulation for set iterations, then stop
-int pyaccell::Automata::run(int iterations)
+int pyaccell::Automata::run(int iterations, std::vector<unsigned int>& output)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -144,8 +144,10 @@ int pyaccell::Automata::run(int iterations)
             iterations--;
         }
         if ((iterations == 0) && type == FINAL_STATE) {
+            output = get_texture_data(textureInput[output_index], sim_width, sim_height);
             glfwPollEvents();
-            continue;
+            glfwTerminate();
+            return 0;
         }
         // render
         /*bind to framebuffer alternatively and "draw" to textureInput
@@ -192,7 +194,18 @@ int pyaccell::Automata::run(int iterations)
 // run simulation indefinitely
 int pyaccell::Automata::run()
 {
-    return run(-1);
+    std::vector<unsigned int> output(0);
+    return run(-1, output);
+}
+
+std::vector<unsigned int> pyaccell::Automata::get_texture_data(unsigned int texture, const unsigned int width, const unsigned int height)
+{
+    unsigned int *pixels = new unsigned int[width * height];
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, pixels);
+    std::vector<unsigned int> data(pixels, pixels + width * height);
+    delete[] pixels;
+    return data;
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly

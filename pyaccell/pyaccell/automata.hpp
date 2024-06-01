@@ -13,9 +13,10 @@ namespace pyaccell {
             Automata(std::vector<unsigned int>&rule, unsigned int states);
             Automata(std::vector<unsigned int>&rule, unsigned int states, unsigned int sim_width, unsigned int sim_height);
             int run();
-            int run(int iterations);
+            int run(int iterations, std::vector<unsigned int>& output);
         private:
             void processInput(GLFWwindow *window);
+            std::vector<unsigned int> get_texture_data(unsigned int texture, const unsigned int width, const unsigned int height);
             enum RUN_TYPE {NO_FINAL_STATE, FINAL_STATE};
     };
 }
