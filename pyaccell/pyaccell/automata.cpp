@@ -103,7 +103,7 @@ int pyaccell::Automata::run(int iterations, std::vector<unsigned int>& output)
     for (int i=0; i<2; i++) {
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[i]);
         if (i == 0) {
-            textureInput[i] = pyaccell::random_input_state(sim_width, sim_height, 2);
+            textureInput[i] = pyaccell::random_input_state(sim_width, sim_height, states);
         }
         else {
             textureInput[i] = pyaccell::create_empty_texture(sim_width, sim_height);
