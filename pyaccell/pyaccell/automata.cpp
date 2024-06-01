@@ -27,7 +27,7 @@ pyaccell::Automata::Automata(std::vector<unsigned int>& rule, unsigned int state
 }
 
 // run simulation for set iterations, then stop
-int pyaccell::Automata::run(int iterations, std::vector<unsigned int>& output)
+int pyaccell::Automata::run(int iterations)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -194,8 +194,7 @@ int pyaccell::Automata::run(int iterations, std::vector<unsigned int>& output)
 // run simulation indefinitely
 int pyaccell::Automata::run()
 {
-    std::vector<unsigned int> output(0);
-    return run(-1, output);
+    return run(-1);
 }
 
 std::vector<unsigned int> pyaccell::Automata::get_texture_data(unsigned int texture, const unsigned int width, const unsigned int height)
