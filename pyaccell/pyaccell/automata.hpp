@@ -12,9 +12,10 @@ namespace pyaccell {
             unsigned int sim_height;
             Automata(std::vector<unsigned int>&rule, unsigned int states);
             Automata(std::vector<unsigned int>&rule, unsigned int states, unsigned int sim_width, unsigned int sim_height);
-            int run(const unsigned int iterations);
-            
+            int run();
+            int run(int iterations);
         private:
             void processInput(GLFWwindow *window);
+            enum RUN_TYPE {NO_FINAL_STATE, FINAL_STATE};
     };
 }

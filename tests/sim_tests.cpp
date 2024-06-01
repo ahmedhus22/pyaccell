@@ -21,7 +21,7 @@ TEST(Automata, RunSimulation) {
     };
     unsigned int states = 2;
     pyaccell::Automata ca(rule, states);
-    EXPECT_FALSE(ca.run(1));
+    EXPECT_FALSE(ca.run());
 }
 
 /*

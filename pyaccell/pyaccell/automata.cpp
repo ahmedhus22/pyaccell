@@ -26,7 +26,8 @@ pyaccell::Automata::Automata(std::vector<unsigned int>& rule, unsigned int state
     this->sim_height = sim_height;
 }
 
-int pyaccell::Automata::run(const unsigned int iterations)
+// run simulation for set iterations, then stop
+int pyaccell::Automata::run(int iterations)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -131,6 +132,7 @@ int pyaccell::Automata::run(const unsigned int iterations)
     simShader.setInt("inputHeight", sim_height);
 
     int input_index = 0;
+    RUN_TYPE type = (iterations == -1) ? NO_FINAL_STATE : FINAL_STATE;
     // render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -138,6 +140,13 @@ int pyaccell::Automata::run(const unsigned int iterations)
         processInput(window);
         int output_index = (input_index == 0) ? 1 : 0;
 
+        if ((iterations > 0) && type == FINAL_STATE) {
+            iterations--;
+        }
+        if ((iterations == 0) && type == FINAL_STATE) {
+            glfwPollEvents();
+            continue;
+        }
         // render
         /*bind to framebuffer alternatively and "draw" to textureInput
             start with frame_index=0 as input and frame_index=1(alt_index) as output
@@ -178,6 +187,12 @@ int pyaccell::Automata::run(const unsigned int iterations)
 
     glfwTerminate();
     return 0;
+}
+
+// run simulation indefinitely
+int pyaccell::Automata::run()
+{
+    return run(-1);
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly

@@ -7,4 +7,4 @@ rule = [
 states = 2
 
 ca = pyaccell.Automata(rule, states)
-ca.run(1)
+ca.run()
