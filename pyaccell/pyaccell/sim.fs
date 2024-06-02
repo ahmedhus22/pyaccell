@@ -7,6 +7,7 @@ in vec2 TexCoords;
 uniform usampler2D uBinomial;
 uniform usampler2D inputStates;
 uniform usampler2D rule;
+uniform sampler2D colorMap;
 uniform int numStates;
 uniform int inputWidth; // width used to create input texture
 uniform int inputHeight;
@@ -45,5 +46,5 @@ void main()
     uint newstate = texelFetch(rule, ivec2(index, curstate), 0).r;
     
     nextstate = newstate;
-    col = vec3(float(nextstate));
+    col = texture(colorMap, vec2((float(nextstate) + 0.5) / 14.0, 0.5)).rgb;
 }

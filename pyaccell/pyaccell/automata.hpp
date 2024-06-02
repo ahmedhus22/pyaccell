@@ -18,6 +18,7 @@ namespace pyaccell {
         private:
             void processInput(GLFWwindow *window);
             std::vector<unsigned int> get_texture_data(unsigned int texture, const unsigned int width, const unsigned int height);
+            unsigned int create_color_map();
             enum RUN_TYPE {NO_FINAL_STATE, FINAL_STATE};
     };
 }

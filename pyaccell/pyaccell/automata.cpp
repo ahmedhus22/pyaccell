@@ -122,11 +122,13 @@ int pyaccell::Automata::run(int iterations)
     unsigned int textureBinomials = pyaccell::generate_binomials();
     unsigned int indices = pyaccell::no_of_indices(states);
     unsigned int textureRule = pyaccell::generate_rule(&rule[0], indices, states);
-    enum SAMPLER {BINOMIAL = 1, INPUT = 2, RULE = 3};
+    unsigned int textureColorMap = create_color_map();
+    enum SAMPLER {BINOMIAL = 1, INPUT = 2, RULE = 3, COLOR_MAP=4};
     simShader.use();
     simShader.setInt("uBinomial", BINOMIAL);
     simShader.setInt("inputStates", INPUT);
     simShader.setInt("rule", RULE);
+    simShader.setInt("colorMap", COLOR_MAP);
     simShader.setInt("numStates", states);
     simShader.setInt("inputWidth", sim_width);
     simShader.setInt("inputHeight", sim_height);
@@ -164,6 +166,8 @@ int pyaccell::Automata::run(int iterations)
         glBindTexture(GL_TEXTURE_2D, textureBinomials);
         glActiveTexture(GL_TEXTURE0 + RULE);
         glBindTexture(GL_TEXTURE_2D, textureRule);
+        glActiveTexture(GL_TEXTURE0 + COLOR_MAP);
+        glBindTexture(GL_TEXTURE_2D, textureColorMap);
         glActiveTexture(GL_TEXTURE0 + INPUT);
         glBindTexture(GL_TEXTURE_2D, textureInput[input_index]);
         glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -205,6 +209,36 @@ std::vector<unsigned int> pyaccell::Automata::get_texture_data(unsigned int text
     std::vector<unsigned int> data(pixels, pixels + width * height);
     delete[] pixels;
     return data;
+}
+
+unsigned int pyaccell::Automata::create_color_map()
+{
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    unsigned char *data = new unsigned char[MAX_STATES * 3];
+    for (int i=0; i<3; ++i) data[i] = 20; // state 0 (dark)
+    for (int i=3; i<6; ++i) data[i] = 255; // state 1 (white)
+    data[6] = 255; data[7] = 20; data[8] = 20; // state 3 (red)
+    // remaining states (random colors)
+    unsigned char color[] = {(char)10, (char)20, (char)40};
+    for (int i=9; i<MAX_STATES*3; i+=3) {
+        color[0] *= 2;
+        color[1] *= 1.5;
+        color[2] += 20;
+
+        data[i] = color[0];
+        data[i + 1] = color[1];
+        data[i + 2] = color[2];
+    }
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, MAX_STATES, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    delete[] data;
+    return texture;
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
