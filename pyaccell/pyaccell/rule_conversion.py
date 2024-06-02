@@ -44,7 +44,6 @@ def get_neighbours_list(neighbours, states):
 def create_rule(transition, states):
     _max_index = max_index(states)
     rule = [0] * (_max_index * states)
-    #state = [_ for _ in range(1, states + 1)]
     max_sum = 8
     possible_neighbours = map(lambda l: clamp_list(l, states), int_partition(max_sum, states))
     neighbours = set()
@@ -52,11 +51,10 @@ def create_rule(transition, states):
         unique_neighbours = (set(permutations(i)))
         for n in unique_neighbours:
             neighbours.add((n))
-    #indices = map(lambda l: get_index(l, states), get_neighbours_list())
-    for cur_state in range(1, states + 1):
+    for cur_state in range(states):
         for neighbour in neighbours:
             next_state = transition(cur_state, neighbour)
             index = get_index(get_neighbours_list(neighbour, states), states)
-            rule[(cur_state - 1) * (_max_index - 1) + index] = next_state
+            rule[cur_state * _max_index + index] = next_state
 
     return rule
