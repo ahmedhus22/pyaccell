@@ -146,7 +146,8 @@ int pyaccell::Automata::run(int iterations)
             iterations--;
         }
         if ((iterations == 0) && type == FINAL_STATE) {
-            output = get_texture_data(textureInput[output_index], sim_width, sim_height);
+            // note: previous input_index is still output before drawing
+            output = get_texture_data(textureInput[input_index], sim_width, sim_height);
             glfwPollEvents();
             glfwTerminate();
             return 0;
