@@ -1,4 +1,4 @@
-#version 330 core
+R"(#version 330 core
 layout (location = 0) out vec3 col;
 layout (location = 1) out uint nextstate;
 
@@ -48,3 +48,4 @@ void main()
     nextstate = newstate;
     col = texture(colorMap, vec2((float(nextstate) + 0.5) / 14.0, 0.5)).rgb;
 }
+)"

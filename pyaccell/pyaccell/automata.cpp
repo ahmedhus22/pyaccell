@@ -6,6 +6,7 @@
 #include <pyaccell/rules.hpp>
 #include <iostream>
 #include <vector>
+#include <string>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -58,8 +59,20 @@ int pyaccell::Automata::run(int iterations)
     }
     glViewport(0, 0, scr_width, scr_height);
 
-    pyaccell::Shader screenShader(SHADER_PATH "framebuffers_screen.vs", SHADER_PATH "framebuffers_screen.fs");
-    pyaccell::Shader simShader(SHADER_PATH "sim.vs", SHADER_PATH "sim.fs");
+    const std::string screen_vs_source = 
+    #include <pyaccell/framebuffers_screen.vs>
+    ;
+    const std::string screen_fs_source = 
+    #include <pyaccell/framebuffers_screen.fs>
+    ;
+    const std::string sim_vs_source = 
+    #include <pyaccell/sim.vs>
+    ;
+    const std::string sim_fs_source = 
+    #include <pyaccell/sim.fs>
+    ;
+    pyaccell::Shader screenShader(screen_vs_source, screen_fs_source);
+    pyaccell::Shader simShader(sim_vs_source, sim_fs_source);
 
     // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
     float quadVertices[] = { 

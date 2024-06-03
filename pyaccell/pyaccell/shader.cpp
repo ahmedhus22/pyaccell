@@ -56,6 +56,32 @@ pyaccell::Shader::Shader(const char* vertexPath, const char* fragmentPath)
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
+
+pyaccell::Shader::Shader(const std::string &vs, const std::string &fs)
+{
+    const char* vShaderCode   = vs.c_str();
+    const char* fShaderCode = fs.c_str();
+    // compile shaders
+    unsigned int vertex, fragment;
+
+    vertex = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex, 1, &vShaderCode, NULL);
+    glCompileShader(vertex);
+    checkCompileErrors(vertex, "VERTEX");
+
+    fragment = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment, 1, &fShaderCode, NULL);
+    glCompileShader(fragment);
+    checkCompileErrors(fragment, "FRAGMENT");
+    
+    ID = glCreateProgram();
+    glAttachShader(ID, vertex);
+    glAttachShader(ID, fragment);
+    glLinkProgram(ID);
+    checkCompileErrors(ID, "PROGRAM");
+    glDeleteShader(vertex);
+    glDeleteShader(fragment);
+}
 // activate the shader
 void pyaccell::Shader::use() 
 { 

@@ -9,6 +9,7 @@ namespace pyaccell {
         public:
             unsigned int ID;
             Shader(const char* vertexPath, const char* fragmentPath);
+            Shader(const std::string &vs, const std::string &fs);
             // activate the shader
             void use();
             // utility uniform functions
