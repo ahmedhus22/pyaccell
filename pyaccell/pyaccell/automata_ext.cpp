@@ -26,6 +26,7 @@ NB_MODULE(pyaccell_ext, m) {
         .def("run", nb::overload_cast<>(&pyaccell::Automata::run), "run simulation indefinitely")
         .def("run", nb::overload_cast<int>(&pyaccell::Automata::run), "run simulation for set iterations, then stop")
         .def_rw("states", &pyaccell::Automata::states)
+        .def_rw("input", &pyaccell::Automata::input)
         .def_ro("output", &pyaccell::Automata::output)
         .def_rw("sim_width", &pyaccell::Automata::sim_width)
         .def_rw("sim_height", &pyaccell::Automata::sim_height);

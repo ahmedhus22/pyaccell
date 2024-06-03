@@ -103,7 +103,10 @@ int pyaccell::Automata::run(int iterations)
     for (int i=0; i<2; i++) {
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[i]);
         if (i == 0) {
-            textureInput[i] = pyaccell::random_input_state(sim_width, sim_height, states);
+            if (input.size() == (sim_width * sim_height))
+                textureInput[i] = create_input_texture();
+            else
+                textureInput[i] = pyaccell::random_input_state(sim_width, sim_height, states);
         }
         else {
             textureInput[i] = pyaccell::create_empty_texture(sim_width, sim_height);
@@ -240,6 +243,20 @@ unsigned int pyaccell::Automata::create_color_map()
 
     delete[] data;
     return texture;
+}
+
+unsigned int pyaccell::Automata::create_input_texture()
+{
+    unsigned int textureInputStates;
+    glGenTextures(1, &textureInputStates);
+    glBindTexture(GL_TEXTURE_2D, textureInputStates);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8UI, sim_width, sim_height, 0, GL_RED_INTEGER, GL_UNSIGNED_INT, input.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    return textureInputStates;
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
