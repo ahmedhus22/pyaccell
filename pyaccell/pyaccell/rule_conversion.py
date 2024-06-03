@@ -37,8 +37,8 @@ def clamp_list(l, size):
 
 def get_neighbours_list(neighbours, states):
     n = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    for state in range(1, states + 1):
-        n[state] = neighbours[state - 1]
+    for state in range(states):
+        n[state] = neighbours[state]
     return n
 
 def create_rule(transition, states):
