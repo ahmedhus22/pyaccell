@@ -4,6 +4,10 @@ from itertools import permutations
 
 # integer partitioning algorithm: https://jeromekelleher.net/generating-integer-partitions.html
 def int_partition(n, states):
+    """
+    integer partitioning algorithm(modified): https://jeromekelleher.net/generating-integer-partitions.html
+    modified to partition n to size <= states (constraint)
+    """
     a = [0 for i in range(n + 1)]
     k = 1
     y = n - 1
@@ -42,6 +46,14 @@ def get_neighbours_list(neighbours, states):
     return n
 
 def create_rule(transition, states):
+    """
+    returns a rule array containing all possible transitions:
+    
+    arguments:
+        transition(state, neighbour) -- a function that defines automata transitions or state changes. 
+            state: int, neighbour: tuple with states as index.
+        states: total number of states in the CA
+    """
     _max_index = max_index(states)
     rule = [0] * (_max_index * states)
     max_sum = 8
