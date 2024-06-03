@@ -18,7 +18,7 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 include(CTest)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/nanobind)
+add_subdirectory(deps/nanobind)
 add_subdirectory(deps/glad)
 add_subdirectory(deps/glm)
 add_subdirectory(deps/glfw)
