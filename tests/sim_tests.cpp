@@ -34,6 +34,23 @@ TEST(Automata, RunSimulation) {
     EXPECT_FALSE(ca.run());
 }
 
+TEST(Automata, RunSimulationsInput) {
+    std::vector<unsigned int> rule = {
+        0,0,0,1,0,0,0,0,0,
+        0,0,1,1,0,0,0,0,0
+    };
+    unsigned int states = 2;
+    pyaccell::Automata ca(rule, states);
+    std::vector<unsigned int> input;
+    for (int i=0; i<ca.sim_height * ca.sim_width; i++) {
+       input.push_back((unsigned int)(1));
+    }
+    ca.input = input;
+    EXPECT_FALSE(ca.run(1));
+    for (int i=0; i<10; i++)
+        EXPECT_EQ(1, ca.output[i]);
+}
+
 /*
 #include <pyaccell/engine.hpp>
 Tests for function implementation (no longer used)
