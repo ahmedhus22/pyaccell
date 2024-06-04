@@ -39,3 +39,9 @@ __pycache__
 
 #vscode
 .vscode/
+
+# Mac
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
