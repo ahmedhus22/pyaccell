@@ -36,6 +36,8 @@ build/
 venv/
 __pycache__
 *.whl
+dist/
+*.tar.gz
 
 #vscode
 .vscode/
