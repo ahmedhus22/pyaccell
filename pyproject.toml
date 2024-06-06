@@ -12,7 +12,7 @@ authors = [
     { name = "Syed Ahmed Hussain", email = "ahmedhus22@gmail.com" },
 ]
 classifiers = [
-    "License :: MIT",
+    "License :: OSI Approved :: MIT License",
 ]
 # Optional: runtime dependency specification
 # dependencies = [ "cryptography >=41.0" ]
