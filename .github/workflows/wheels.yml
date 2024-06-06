@@ -41,12 +41,21 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - name: Install Linux dependencies
-      run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt update
-            sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
-          fi
+    - if: matrix.os == 'ubuntu-latest'
+      - name: Install Linux dependencies 
+          run: |
+              sudo apt update
+              sudo apt install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libxext-dev libwayland-dev libxkbcommon-dev
+          run: cmake -B build-null-shared -D GLFW_BUILD_WAYLAND=OFF -D GLFW_BUILD_X11=OFF -D BUILD_SHARED_LIBS=ON
+          run: cmake --build build-null-shared --parallel
+          run: cmake -B build-x11-shared -D GLFW_BUILD_WAYLAND=OFF -D GLFW_BUILD_X11=ON -D BUILD_SHARED_LIBS=ON
+          run: cmake --build build-x11-shared --parallel
+          run: cmake -B build-wayland-shared -D GLFW_BUILD_WAYLAND=ON -D GLFW_BUILD_X11=OFF -D BUILD_SHARED_LIBS=ON
+          run: cmake --build build-wayland-shared --parallel
+          run: cmake -B build-full-static -D GLFW_BUILD_WAYLAND=ON -D GLFW_BUILD_X11=ON
+          run: cmake --build build-full-static --parallel
+          run: cmake -B build-full-shared -D GLFW_BUILD_WAYLAND=ON -D BUILD_SHARED_LIBS=ON -D GLFW_BUILD_X11=ON
+          run: cmake --build build-full-shared --parallel
 
     - uses: pypa/cibuildwheel@v2.17
 
