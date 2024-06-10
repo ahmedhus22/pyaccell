@@ -1,7 +1,6 @@
 #include <pyaccell/automata.hpp>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <pyaccell/engine.hpp>
 #include <pyaccell/shader.hpp>
 #include <pyaccell/rules.hpp>
 #include <iostream>
